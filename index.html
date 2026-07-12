@@ -177,6 +177,8 @@ function calcDP(){
   }
   document.getElementById('dp-result').innerHTML = resultHtml;
 
+  if(window.JRH && JRH.saveOutput) JRH.saveOutput({vs_m3:data.vs});
+
   var p = '';
   p += '【雨水滯洪池容量設計計算過程】\n\n';
   p += '一、輸入條件\n';
@@ -208,6 +210,17 @@ function calcDP(){
 }
 
 calcDP();
+
+function jrhTryInbound(){
+  if(!(window.JRH && JRH.showInboundBanner))return;
+  JRH.showInboundBanner('ro','逕流廢水削減計畫',function(data){
+    document.getElementById('dp-qi').value=data.Q_m3s.toFixed(4);
+    document.getElementById('dp-tc').value=data.tc_min;
+    calcDP();
+  });
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',jrhTryInbound);
+else jrhTryInbound();
 </script>
 <script>
 window.jrhDocMeta={
